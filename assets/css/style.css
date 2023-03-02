@@ -1,0 +1,112 @@
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+html, body{
+    width: 100vw;
+    height: 100vh;
+    
+    overflow: hidden;
+    font-family: 'Press Start 2P', cursive;
+}
+
+#container{
+    display: inline-block;
+    
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+}
+
+#healthLifeAndTimer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: absolute;
+
+    width: 100%;
+
+    padding: 20px;
+}
+
+#container #healthLifeAndTimer .containerBar{
+    position: relative;
+
+    height: 40px;
+    width: 40%;
+
+    border-top: 4px solid white;
+    border-left: 4px solid white;
+    border-bottom: 4px solid white;
+}
+
+#container #healthLifeAndTimer .containerBar.player{
+    display: flex;
+    justify-content: flex-end;
+}
+
+#container #healthLifeAndTimer .containerBar.enemy{
+    border-left: 0;
+    border-right: 4px solid white;
+}
+
+#container #healthLifeAndTimer .containerBar .health{
+    background-color: red;
+    height: 100%;
+    width: 100%;
+    
+}
+
+#container #healthLifeAndTimer .containerBar .lifeBar{
+    width: 100%;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+
+    background-color: #818cf8;
+    
+}
+#container #healthLifeAndTimer .containerBar .lifeBar.player{
+    background-color: #818cf8;
+}
+
+#container #healthLifeAndTimer #timer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    width: 100px;
+    height: 60px;
+
+    border: 4px solid white;
+    color: white;
+    background-color: black;
+}
+
+#container #healthLifeAndTimer .containerBar .lifeBar.enemy{
+    left: 0;
+}
+
+#container #resultTitle{
+    display: none;
+    align-items: center;
+    justify-content: center;
+    
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    color: white;
+}
+canvas{
+    width: 100%;
+    height: 100%;
+}

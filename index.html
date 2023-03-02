@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <title>The Fighter Game</title>
+</head>
+<body>
+
+    <div id="container">
+        <div id="healthLifeAndTimer">
+            <div class="containerBar player">
+                <div id="playerHealth" class="lifeBar player"></div>
+                <div class="health"></div>
+            </div>
+
+            <div id="timer"></div>
+
+            <div class="containerBar enemy">
+                <div id="enemyHealth"  class="lifeBar enemy"></div>
+                <div class="health"></div>
+            </div>
+        </div>
+        <div id="resultTitle"></div>
+        <canvas></canvas>
+    </div>
+
+    <script type="module" src="./index.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js" integrity="sha512-H6cPm97FAsgIKmlBA4s774vqoN24V5gSQL4yBTDOY2su2DeXZVhQPxFK4P6GPdnZqM9fg1G3cMv5wD7e6cFLZQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+</html>
