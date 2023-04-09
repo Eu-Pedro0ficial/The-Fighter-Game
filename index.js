@@ -1,17 +1,22 @@
 'use strict';
 import Fighter from "./assets/js/classes/Fighter.js";
 import Sprite from "./assets/js/classes/Spriter.js";
-import rectangularCollision from "./assets/js/helpers/detectCollision.js";
+import { detectCollision } from "./assets/js/helpers/detectCollision.js";
 import decreaseTimer from "./assets/js/helpers/decreaseTimer.js";
 import determineWinner from "./assets/js/helpers/determineWinner.js";
+import detectJump from "./assets/js/helpers/detectJump.js";
+import characterMovement from "./assets/js/helpers/characterMovement.js";
+import character from "./assets/js/helpers/characters.js";
+
+const timeForStartGame = document.getElementById('timerForStartGame');
+const playerSelected = document.getElementById('selectPlayer');
+const enemySelected = document.getElementById('selectEnemy');
 
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
 
 canvas.width = 1024;
 canvas.height = 576;
-// canvas.width = window.screen.width + 6;
-// canvas.height = window.screen.height - 130;
 
 c.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -35,10 +40,11 @@ const shop = new Sprite({
     canvasObjectProperties: c,
 });
 
-const player = new Fighter({
+let player = new Fighter({
+    name: "Ishikawa Aiko",
     canvas: canvas,
     position: {
-        x: 0,
+        x: 200,
         y: 0,
     },
     velocity: {
@@ -58,50 +64,75 @@ const player = new Fighter({
     },
     sprites: {
         idle: {
-            imageSrc: './assets/img/samuraiMack/Idle.png',
+            imageSrc: {
+                right: './assets/img/samuraiMack/Idle.png',
+                left: './assets/img/samuraiMack/EsquerdaIdle.png'
+            },
             framesMax: 8
         },
         run: {
-            imageSrc: './assets/img/samuraiMack/Run.png',
+            imageSrc: {
+                right: './assets/img/samuraiMack/Run.png',
+                left: './assets/img/samuraiMack/EsquerdaRun.png'
+            },
             framesMax: 8
         },
         jump: {
-            imageSrc: './assets/img/samuraiMack/Jump.png',
+            imageSrc: {
+                right: './assets/img/samuraiMack/Jump.png',
+                left: './assets/img/samuraiMack/EsquerdaJump.png'
+            },
             framesMax: 2
         },
         fall: {
-            imageSrc: './assets/img/samuraiMack/Fall.png',
+            imageSrc: {
+                right: './assets/img/samuraiMack/Fall.png',
+                left: './assets/img/samuraiMack/EsquerdaFall.png'
+            },
             framesMax: 2
         },
         attack: {
-            imageSrc: './assets/img/samuraiMack/Attack2.png',
+            imageSrc: {
+                right: './assets/img/samuraiMack/Attack2.png',
+                left: './assets/img/samuraiMack/EsquerdaAttack2.png'
+            },
             framesMax: 6
         },
         takeHit: {
-            imageSrc: './assets/img/samuraiMack/Take Hit - white silhouette.png',
+            imageSrc: {
+                right: './assets/img/samuraiMack/Take Hit - white silhouette.png',
+                left: './assets/img/samuraiMack/EsquerdaTake Hit - white silhouette.png'
+            },
             framesMax: 4
         },
         death: {
-            imageSrc: './assets/img/samuraiMack/Death.png',
+            imageSrc: {
+                right: './assets/img/samuraiMack/Death.png',
+                left: './assets/img/samuraiMack/Death.png'
+            },
             framesMax: 6
         }
     },
     attackBox: {
         offset: {
-            x: 80,
+            x: {
+                left: -200,
+                right: 95
+            },
             y: 50
         },
-        width: 160,
+        width: 175,
         height: 50
     },
     damage: 25,
     canvasObjectProperties: c,
 });
 
-const enemy = new Fighter({
+let enemy = new Fighter({
+    name: "Kenji",
     canvas: canvas,
     position: {
-        x: 400,
+        x: 700,
         y: 100,
     },
     velocity: {
@@ -122,37 +153,61 @@ const enemy = new Fighter({
     color: 'blue',
     sprites: {
         idle: {
-            imageSrc: './assets/img/kenji/Idle.png',
+            imageSrc: {
+                right: './assets/img/kenji/DireitaIdle.png',
+                left: './assets/img/kenji/Idle.png'
+            },
             framesMax: 4
         },
         run: {
-            imageSrc: './assets/img/kenji/Run.png',
+            imageSrc: {
+                right: './assets/img/kenji/DireitaRun.png',
+                left: './assets/img/kenji/Run.png'
+            },
             framesMax: 8
         },
         jump: {
-            imageSrc: './assets/img/kenji/Jump.png',
+            imageSrc: {
+                right: './assets/img/kenji/DireitaJump.png',
+                left: './assets/img/kenji/Jump.png'
+            },
             framesMax: 2
         },
         fall: {
-            imageSrc: './assets/img/kenji/Fall.png',
+            imageSrc: {
+                right: './assets/img/kenji/DireitaFall.png',
+                left: './assets/img/kenji/Fall.png'
+            },
             framesMax: 2
         },
         attack: {
-            imageSrc: './assets/img/kenji/Attack1.png',
+            imageSrc: {
+                right: './assets/img/kenji/DireitaAttack1.png',
+                left: './assets/img/kenji/Attack1.png'
+            },
             framesMax: 4
         },
         takeHit: {
-            imageSrc: './assets/img/kenji/Take hit.png',
+            imageSrc: {
+                right: './assets/img/kenji/DireitaTake hit.png',
+                left: './assets/img/kenji/Take hit.png'
+            },
             framesMax: 3
         },
         death: {
-            imageSrc: './assets/img/kenji/Death.png',
+            imageSrc: {
+                right: './assets/img/kenji/Death.png',
+                left: './assets/img/kenji/Death.png'
+            },
             framesMax: 7
         }
     },
     attackBox: {
         offset: {
-            x: -170,
+            x: {
+                left: -170,
+                right: 70
+            },
             y: 50
         },
         width: 170,
@@ -176,104 +231,103 @@ const keys = {
         pressed: false,
     },
 }
-
-const timerId = decreaseTimer();
-
 function animate(){
     window.requestAnimationFrame(animate);
     c.fillStyle = 'black';
     c.fillRect(0, 0, canvas.width, canvas.height);
-
+    
     background.update();
     shop.update();
-
+    
     c.fillStyle = 'rgba(255, 255, 255, 0.15)';
     c.fillRect(0, 0, canvas.width, canvas.height);
-
-    player.update();
-    enemy.update();
-
-    // Player movement
-    player.velocity.x = 0;
     
-    if(keys.a.pressed && player.lastKey === 'a'){
-        player.velocity.x = -5;
-        player.switchSprite('run');
-    } else if(keys.d.pressed && player.lastKey === 'd'){
-        player.velocity.x = 5;
-        player.switchSprite('run');
-    }else{
-        player.switchSprite('idle');
+    let display = window.getComputedStyle(document.getElementById('homeModal'), null).display;
+    if(display === 'none'){
+        player.update();
+        enemy.update();
     }
 
-    if(player.velocity.y < 0){
-        player.switchSprite('jump');
-    }else if(player.velocity.y > 0){
-        player.switchSprite('fall'); 
+    if(timeForStartGame.textContent != ''){
+        return
     }
+
+    if(!playerSelected.checked){
+   
+        let index = character.findIndex((element)=>{
+            return element.name === player.name;
+        });
+        let playerSelected = character[index];
+        document.getElementById('playerImage').src = playerSelected.pathImage;
+        document.getElementById('playerName').innerText = playerSelected.name;
+        document.getElementById('characterOne').classList.remove('active')
+    }else{
+        document.getElementById('characterOne').classList.add('active')
+    }
+    
+    if(!enemySelected.checked){
+        
+        let index = character.findIndex((element)=>{
+            return element.name === enemy.name;
+        });
+        let enemySelected = character[index];
+        document.getElementById('enemyImage').src = enemySelected.pathImage;
+        document.getElementById('enemyName').innerText = enemySelected.name;
+        document.getElementById('characterTwo').classList.remove('active')
+    }else{
+        document.getElementById('characterTwo').classList.add('active')
+    }
+    
+    // Player movement
+    characterMovement(player, 'a', 'd', keys);
+    detectJump(player);
 
     // Enemy movement
-    enemy.velocity.x = 0;
-    if(keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft'){
-        enemy.velocity.x = -5;
-        enemy.switchSprite('run');
-    } else if(keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight'){
-        enemy.velocity.x = 5;
-        enemy.switchSprite('run');
-    }else{
-        enemy.switchSprite('idle');
-    }
+    characterMovement(enemy, 'ArrowLeft', 'ArrowRight', keys)
+    detectJump(enemy);
 
-    if(enemy.velocity.y < 0){
-        enemy.switchSprite('jump');
-    }else if(enemy.velocity.y > 0){
-        enemy.switchSprite('fall'); 
-    }
-
-    // Detect for collision
-    if(
-        rectangularCollision({
-            rectangle1: player,
-            rectangle2: enemy
-        }) &&
-        player.isAttacking && player.frameCurrent === 4
-    ){          
-        enemy.takeHit(player.damage)
-        player.isAttacking = false;
-
-        gsap.to('#enemyHealth', {
-            width: enemy.health + '%'
-        })
-    }
-
-    if(player.isAttacking && player.frameCurrent === 4){
-        player.isAttacking = false;
-    }
+    // Player Collision
+    detectCollision({
+        rectangle1: player,
+        rectangle2: enemy,
+        gsap: gsap,
+        id: '#enemyHealth',
+        frame: 4
+    })
     
-    if(
-        rectangularCollision({
-            rectangle1: enemy,
-            rectangle2: player
-        }) &&
-        enemy.isAttacking && enemy.frameCurrent === 2
-    ){
-        player.takeHit(enemy.damage);
-        enemy.isAttacking = false;
-
-        gsap.to('#playerHealth', {
-            width: player.health + '%'
-        })
-    }
-
-    if(enemy.isAttacking && enemy.frameCurrent === 2){
-        enemy.isAttacking = false;
-    }
-
+    // Enemy Collision
+    detectCollision({
+        rectangle1: enemy,
+        rectangle2: player,
+        gsap: gsap,
+        id: '#playerHealth',
+        frame: 2
+    })
     if(enemy.health <= 0 || player.health <= 0){
-        determineWinner({ player, enemy, timerId })
+        determineWinner({ player, enemy })
     }
 }  
 animate();
+
+let timeValue = 3;
+function startTime(){
+    let index = setTimeout(startTime, 1000)
+    timeForStartGame.innerText = timeValue;
+    
+    if(timeValue === 0){
+        timeForStartGame.innerText = 'Ready';
+    }
+
+    if(timeValue <= -2){
+        timeForStartGame.innerText = '';
+        clearTimeout(index);
+    }
+    
+    if(timeValue === -1){
+        timeForStartGame.innerText = 'Go';
+    }
+    timeValue--
+}
 
 window.addEventListener('keydown', (event)=>{
     if(!player.dead){
@@ -283,18 +337,20 @@ window.addEventListener('keydown', (event)=>{
                 keys.d.pressed = true;
                 player.lastKey = 'd';
                 break
-            case 'a':
+                case 'a':
                 keys.a.pressed = true;;
                 player.lastKey = 'a';
                 break
             case 'w':
-                player.velocity.y = -10;
+                if(!player.checkJump){
+                    player.velocity.y = -10;
+                }
                 break
-            case ' ':
-                player.attackAction();
-                break
-
-            
+                case ' ':
+                    player.attackAction();
+                    break
+                    
+                    
         }
     }
 
@@ -308,10 +364,12 @@ window.addEventListener('keydown', (event)=>{
                 keys.ArrowLeft.pressed = true;;
                 enemy.lastKey = 'ArrowLeft';
                 break
-            case 'ArrowUp':
-                enemy.velocity.y = -10;
+                case 'ArrowUp':
+                    if(!enemy.checkJump){
+                        enemy.velocity.y = -10;
+                }
                 break
-            case 'ArrowDown':
+                case 'ArrowDown':
                 enemy.attackAction();
                 break
         }
@@ -328,12 +386,66 @@ window.addEventListener('keyup', (event)=>{
             break
 
 
-        case 'ArrowRight':
+            case 'ArrowRight':
             keys.ArrowRight.pressed = false;
             break
-        case 'ArrowLeft':
-            keys.ArrowLeft.pressed = false;;
-            break
-
+            case 'ArrowLeft':
+                keys.ArrowLeft.pressed = false;;
+                break
+                
     }
 });
+
+document.getElementById('changeCharacter').addEventListener('click', ()=>{
+    document.getElementById('modalForChangeCharacter').style.display = 'block';
+});
+document.getElementById('closeModal').addEventListener('click', ()=>{
+    document.getElementById('modalForChangeCharacter').style.display = 'none';
+});
+document.getElementById('play').addEventListener('click', ()=>{
+    enemy.direction = 'left'
+    player.direction = 'right'
+
+    decreaseTimer();
+    startTime()
+    
+    timeForStartGame.style.display = 'block';
+    document.getElementById('homeModal').style.display = 'none';
+});
+document.getElementById('home').addEventListener('click', ()=>{
+    window.location.reload(false)
+});
+document.getElementById('render').addEventListener('click', (event)=>{
+    let index = Number(event.target.getAttribute("data-index"));
+    let characterSelected = character[index];
+
+    characterSelected.canvas = canvas;
+    characterSelected.canvasObjectProperties = c;
+    
+    if(playerSelected.checked){
+        characterSelected.position.x = 700;
+        enemy = new Fighter(characterSelected);
+    }else{
+        player = new Fighter(characterSelected);
+    }
+});
+
+function renderCharacterPreview(){
+    let content = '';
+    character.forEach( ( character, index ) =>{
+        content += `
+            <div class="preview" data-index="${index}">
+                <img src="${character.pathImage}" data-index="${index}" alt="Imagem do personagem">
+                <p data-index="${index}">
+                    ${character.name}
+                </p>
+            </div>
+        `;
+    })
+    document.querySelector("#render").innerHTML = content;
+}
+renderCharacterPreview();
+
+export {
+    enemy, player
+}

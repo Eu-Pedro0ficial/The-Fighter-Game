@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="./assets/css/modal.css">
     <title>The Fighter Game</title>
 </head>
 <body>
@@ -19,18 +20,67 @@
                 <div class="health"></div>
             </div>
 
-            <div id="timer"></div>
+            <div id="timer">--</div>
 
             <div class="containerBar enemy">
                 <div id="enemyHealth"  class="lifeBar enemy"></div>
                 <div class="health"></div>
             </div>
         </div>
-        <div id="resultTitle"></div>
-        <canvas></canvas>
+        <div id="restartModal">
+            <div id="background">
+                <div id="resultTitle"></div>
+                <div id="buttons">
+                    <button id="home">Home</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal home" id="homeModal">
+            <div id="changeCharacter">
+                Change
+            </div>
+            <div id="title">
+                <h1>The Fighters.</h1>
+            </div>
+            <div class="button-game" id="play">2 vs 2</div>
+            <div class="button-game">
+                <p>Single Player</p>
+                <div class="shortly">shortly</div>
+            </div>
+            <div class="button-game">
+                <p>Multiplayer</p>
+                <div class="shortly">shortly</div>
+            </div>
+        </div>
+
+        <div class="modal changeCharacter" id="modalForChangeCharacter">
+            <div id="containerFromCloseModal">
+                <div id="closeModal">
+                    X
+                </div>
+            </div>
+            <div id="render"></div>
+        </div>
+        <canvas id="canvas"></canvas>
+
+    </div>
+    <div id="timerForStartGame"></div>
+    <div id="characterSelected">
+        <div class="containerCharacterSelected" id="characterOne">
+            <input type="checkbox" name="" id="selectPlayer">
+            <img id="playerImage" src="./assets/img/samuraiMack/previewIdle.png" alt="">
+            <h1 id="playerName">Ishikawa Aiko</h1>
+        </div>
+        <div class="containerCharacterSelected" id="characterTwo">
+            <input type="checkbox" name="" id="selectEnemy">
+            <img id="enemyImage" src="./assets/img/kenji/previewIdle.png" alt="">
+            <h1 id="enemyName">Kenji</h1>
+        </div>
     </div>
 
-    <script type="module" src="./index.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js" integrity="sha512-H6cPm97FAsgIKmlBA4s774vqoN24V5gSQL4yBTDOY2su2DeXZVhQPxFK4P6GPdnZqM9fg1G3cMv5wD7e6cFLZQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="module" src="./index.js"></script>
 </body>
 </html>

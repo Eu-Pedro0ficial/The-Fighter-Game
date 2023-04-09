@@ -1,8 +1,8 @@
-function determineWinner({player, enemy, timerId}){
-    clearTimeout(timerId);
+function determineWinner({player, enemy}){
+    const restartModal = document.querySelector('#background');
     const resultTitle = document.querySelector('#resultTitle');
 
-    resultTitle.style.display = 'flex';
+    restartModal.style.display = 'flex';
 
     if(player.health == enemy.health){
         resultTitle.innerHTML = 'Tie';

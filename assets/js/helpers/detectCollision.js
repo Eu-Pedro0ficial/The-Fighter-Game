@@ -10,4 +10,34 @@ function rectangularCollision({
     )
 }
 
-export default rectangularCollision;
+function detectCollision({
+    rectangle1,
+    rectangle2, 
+    gsap,
+    id,
+    frame
+}){
+    if(
+        rectangularCollision({
+            rectangle1,
+            rectangle2
+        }) &&
+        rectangle1.isAttacking && rectangle1.frameCurrent === frame
+    ){          
+        rectangle2.takeHit(rectangle1.damage)
+        rectangle1.isAttacking = false;
+
+        gsap.to(id, {
+            width: rectangle2.health + '%'
+        })
+    }
+
+    if(rectangle1.isAttacking && rectangle1.frameCurrent === frame){
+        rectangle1.isAttacking = false;
+    }
+}
+
+export {
+    rectangularCollision,
+    detectCollision
+};
